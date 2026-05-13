@@ -2,6 +2,8 @@ import requests
 import time
 import json
 import os
+import random
+import string
 
 # ===========================
 # KONSTANTA
@@ -20,32 +22,41 @@ CONFIG = {
     "auto_clean": True,
     "auto_upgrade": True,
     "auto_zone": True,
-    "auto_use_item": True,       # auto pakai item (worm_tin, shiny_spoon, dll)
-    "cast_per_cycle": 10,        # jumlah cast per siklus
-    "delay_between_cast": 0.5,   # delay antar cast (detik)
-    "delay_after_sell": 1,       # delay setelah sell
-    "delay_after_repair": 5,     # delay setelah repair
-    "upgrade_threshold": 0.3,    # beli upgrade jika harga <= 30% dari coins
+    "auto_use_item": True,
+    "auto_rebirth": True,         # auto rebirth (prestige)
+    "auto_charter": True,         # auto charter zone
+    "auto_equip_gear": True,      # auto equip best gear
+    "cast_per_cycle": 10,
+    "delay_between_cast": 0.3,
+    "delay_after_sell": 0.5,
+    "delay_after_repair": 3,
+    "upgrade_threshold": 0.5,     # beli upgrade jika harga <= 50% dari coins
+    "rebirth_min_coins": 500000,  # minimum coins sebelum rebirth
+    "upgrade_max_level": {},      # per-upgrade max level, e.g. {"rod": 50, "bait": 40}
 }
 
 # ===========================
 # UPGRADE PRIORITY (urutan beli)
+# Berdasarkan data game state kamu
 # ===========================
 UPGRADE_PRIORITY = [
     "rod",
     "bait",
     "bobber",
     "hook",
+    "junk_filter",
     "tackle_net",
     "weather_vane",
-    "line",
     "dock",
-    "tacklebox",
     "crew",
+    "line",
+    "market_bell",
+    "reel",
 ]
 
 # ===========================
 # ZONE ORDER (dari murah ke mahal)
+# Berdasarkan dex data dari game state
 # ===========================
 ZONE_ORDER = [
     "pond",
@@ -64,25 +75,28 @@ ZONE_ORDER = [
     "glass_current",
     "ember_vent",
     "starfall_rift",
+    "moon_bloom",
+    "clockwork_tide",
+    "dreamwhale_expanse",
+    "astral_tide",
+    "echoing_orbit",
 ]
 
 # ===========================
-# HARGA UPGRADE (base formula approximate)
-# Chiyo Fish upgrade costs grow exponentially
-# Format: upgrade_name -> (base_cost, multiplier)
+# ITEMS YANG BISA DIPAKAI
 # ===========================
-UPGRADE_COSTS = {
-    "rod":          (100, 1.8),
-    "bait":         (50, 1.6),
-    "bobber":       (75, 1.7),
-    "hook":         (60, 1.65),
-    "tackle_net":   (200, 1.75),
-    "weather_vane": (300, 1.8),
-    "line":         (150, 1.7),
-    "dock":         (250, 1.75),
-    "tacklebox":    (200, 1.7),
-    "crew":         (350, 1.8),
-}
+USABLE_ITEMS = [
+    "worm_tin",
+    "shiny_spoon",
+    "sturdy_float",
+    "chum_bucket",
+    "lucky_pearl",
+    "storm_jar",
+    "pocket_moon",
+    "prism_chum",
+    "jelly_lantern",
+    "tiny_net",
+]
 
 
 # ===========================
@@ -148,6 +162,14 @@ def refresh_access_token():
 
 
 # ===========================
+# GENERATE REQUEST ID (mirip game)
+# ===========================
+def gen_request_id(prefix="bot"):
+    rand = ''.join(random.choices(string.ascii_lowercase + string.digits, k=6))
+    return f"{prefix}_{rand}"
+
+
+# ===========================
 # HEADERS
 # ===========================
 def make_headers():
@@ -155,7 +177,9 @@ def make_headers():
         "Authorization": f"Bearer {load_bearer()}",
         "Content-Type": "application/json",
         "Referer": "https://fishin-chiyo.vercel.app/",
-        "User-Agent": "Mozilla/5.0"
+        "Origin": "https://fishin-chiyo.vercel.app",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36",
+        "x-fishin-request-id": gen_request_id("cast"),
     }
 
 
@@ -163,25 +187,29 @@ def make_headers():
 # SEND ACTION (CORE)
 # ===========================
 def send_action(action_type, payload_data, revision_value):
-    payload = {
+    body = {
         "type": action_type,
         "payload": payload_data,
         "revision": revision_value
     }
 
-    response = requests.post(GAME_URL, headers=make_headers(), json=payload)
+    headers = make_headers()
+    headers["x-fishin-request-id"] = gen_request_id(action_type[:4])
+
+    response = requests.post(GAME_URL, headers=headers, json=body)
 
     # Bearer expired → refresh & retry
     if response.status_code == 401:
         print("[401] Bearer expired → refreshing...")
         new_token = refresh_access_token()
         if new_token:
-            response = requests.post(GAME_URL, headers=make_headers(), json=payload)
+            headers["Authorization"] = f"Bearer {new_token}"
+            response = requests.post(GAME_URL, headers=headers, json=body)
         else:
             return {
                 "retry": False, "repair": False, "clean": False,
                 "revision": revision_value, "success": False,
-                "state": None
+                "state": None, "error": "auth_failed"
             }
 
     try:
@@ -189,44 +217,49 @@ def send_action(action_type, payload_data, revision_value):
         state = data.get("state", {})
         user = state.get("user", {})
 
-        name = user.get("name", "Unknown")
         coins = state.get("coins", 0)
         gems = state.get("gems", 0)
         zone = state.get("zoneId", "?")
-        upgrades = state.get("upgrades", {})
 
         latest_revision = data.get("revision", state.get("revision", revision_value))
 
         print(f"  [{action_type.upper()}] Status: {response.status_code} | "
               f"Coins: {coins:,.0f} | Gems: {gems} | Zone: {zone} | Rev: {latest_revision}")
 
-        # Conflict (409) → retry
+        # Conflict (409) → need to sync revision
         if response.status_code == 409:
             return {
                 "retry": True, "repair": False, "clean": False,
                 "revision": latest_revision, "success": False,
-                "state": state
+                "state": state, "error": "conflict"
             }
 
-        # Hook broken (400)
+        # Error (400) → hook broken or foul
         if response.status_code == 400:
             error_msg = data.get("error", "")
             if "foul" in error_msg.lower() or "clean" in error_msg.lower():
                 return {
                     "retry": False, "repair": False, "clean": True,
                     "revision": latest_revision, "success": False,
-                    "state": state
+                    "state": state, "error": error_msg
                 }
+            if "hook" in error_msg.lower() or "broken" in error_msg.lower() or "repair" in error_msg.lower():
+                return {
+                    "retry": False, "repair": True, "clean": False,
+                    "revision": latest_revision, "success": False,
+                    "state": state, "error": error_msg
+                }
+            # Other 400 error
             return {
-                "retry": False, "repair": True, "clean": False,
+                "retry": False, "repair": False, "clean": False,
                 "revision": latest_revision, "success": False,
-                "state": state
+                "state": state, "error": error_msg
             }
 
         return {
             "retry": False, "repair": False, "clean": False,
             "revision": latest_revision, "success": response.status_code == 200,
-            "state": state
+            "state": state, "error": None
         }
 
     except Exception as e:
@@ -234,7 +267,7 @@ def send_action(action_type, payload_data, revision_value):
         return {
             "retry": False, "repair": False, "clean": False,
             "revision": revision_value, "success": False,
-            "state": None
+            "state": None, "error": str(e)
         }
 
 
@@ -251,7 +284,7 @@ def auto_repair_hook(revision):
         print("[AUTO-REPAIR] Hook berhasil diperbaiki!")
         return revision
 
-    # Jika masih error, coba clean dulu
+    # Coba clean dulu lalu repair
     print("[AUTO-REPAIR] Repair gagal, mencoba cleanHook...")
     result = send_action("cleanHook", {"score": 1}, revision)
     revision = result["revision"]
@@ -259,7 +292,7 @@ def auto_repair_hook(revision):
     if result.get("success"):
         print("[AUTO-CLEAN] Hook berhasil dibersihkan!")
 
-    # Coba repair lagi setelah clean
+    # Coba repair lagi
     result = send_action("repairHook", {}, revision)
     revision = result["revision"]
 
@@ -283,6 +316,7 @@ def auto_clean_hook(revision):
 
 # ===========================
 # AUTO UPGRADE
+# API: {"type": "buyUpgrade", "payload": {"id": "rod", "count": 1}}
 # ===========================
 def auto_upgrade(revision, state):
     if not CONFIG["auto_upgrade"] or state is None:
@@ -293,60 +327,74 @@ def auto_upgrade(revision, state):
 
     print(f"\n[AUTO-UPGRADE] Coins: {coins:,.0f} | Checking upgrades...")
 
-    upgraded = True
-    while upgraded:
-        upgraded = False
+    bought_any = True
+    total_bought = 0
+
+    while bought_any:
+        bought_any = False
 
         for upgrade_name in UPGRADE_PRIORITY:
             current_level = current_upgrades.get(upgrade_name, 0)
 
-            # Estimasi harga berdasarkan level
-            if upgrade_name in UPGRADE_COSTS:
-                base, mult = UPGRADE_COSTS[upgrade_name]
-                estimated_cost = base * (mult ** current_level)
-            else:
-                estimated_cost = 1000 * (1.8 ** current_level)
+            # Cek max level dari config
+            max_lv = CONFIG["upgrade_max_level"].get(upgrade_name, 9999)
+            if current_level >= max_lv:
+                continue
 
-            # Beli jika cukup uang dan harga <= threshold
-            if coins >= estimated_cost and estimated_cost <= coins * CONFIG["upgrade_threshold"]:
-                print(f"  [UPGRADE] Membeli {upgrade_name} (Lv.{current_level} → Lv.{current_level+1}) "
-                      f"| Est. cost: {estimated_cost:,.0f}")
+            # Server akan reject kalau coins tidak cukup,
+            # tapi kita tetap cek threshold supaya tidak spam request
+            # Estimasi kasar: cost bertambah exponential
+            # Kita langsung kirim aja, server yang validasi
+            # Tapi pakai threshold supaya tidak buang semua coins
+            estimated_cost = coins * 0.01  # assume upgrade ~1% of coins (conservative)
 
-                result = send_action("buyUpgrade", {"upgradeId": upgrade_name}, revision)
+            # Kirim buy request
+            result = send_action("buyUpgrade", {"id": upgrade_name, "count": 1}, revision)
+            revision = result["revision"]
+
+            if result.get("success"):
+                current_upgrades[upgrade_name] = current_level + 1
+                if result.get("state"):
+                    new_coins = result["state"].get("coins", coins)
+                    spent = coins - new_coins
+                    coins = new_coins
+                    print(f"  [UPGRADE] ✓ {upgrade_name} Lv.{current_level} → Lv.{current_level+1} "
+                          f"| Spent: {spent:,.0f} | Remaining: {coins:,.0f}")
+                bought_any = True
+                total_bought += 1
+                time.sleep(0.2)
+
+                # Stop jika coins sudah rendah (< threshold)
+                if coins < 100:
+                    bought_any = False
+                    break
+            elif result.get("retry"):
                 revision = result["revision"]
+                time.sleep(0.5)
+                break
+            else:
+                # Tidak bisa beli (coins kurang atau max level) → skip ke next
+                continue
 
-                if result.get("success"):
-                    current_upgrades[upgrade_name] = current_level + 1
-                    if result.get("state"):
-                        coins = result["state"].get("coins", coins)
-                    upgraded = True
-                    time.sleep(0.3)
-                elif result.get("retry"):
-                    revision = result["revision"]
-                    time.sleep(1)
-                    break
-                else:
-                    # Harga tidak cukup atau error lain, skip
-                    break
-
-    print(f"[AUTO-UPGRADE] Selesai. Coins tersisa: {coins:,.0f}")
+    print(f"[AUTO-UPGRADE] Selesai. Bought: {total_bought} | Coins tersisa: {coins:,.0f}")
     return revision
 
 
 # ===========================
-# AUTO ZONE
+# AUTO ZONE (travel/change zone)
+# API: {"type": "changeZone", "payload": {"zoneId": "kelp"}}
 # ===========================
 def auto_zone(revision, state):
     if not CONFIG["auto_zone"] or state is None:
         return revision
 
     current_zone = state.get("zoneId", "pond")
-    coins = state.get("coins", 0)
 
     # Cari index zone saat ini
     try:
         current_idx = ZONE_ORDER.index(current_zone)
     except ValueError:
+        # Zone tidak ada di list (mungkin zone baru)
         return revision
 
     # Jika sudah di zone terakhir, skip
@@ -355,42 +403,22 @@ def auto_zone(revision, state):
 
     next_zone = ZONE_ORDER[current_idx + 1]
 
-    # Zone unlock costs (approximate)
-    zone_costs = {
-        "lake": 5000,
-        "river": 25000,
-        "marsh": 100000,
-        "pier": 500000,
-        "reef": 2000000,
-        "open": 10000000,
-        "kelp": 50000000,
-        "storm": 200000000,
-        "frozen": 1000000000,
-        "twilight": 5000000000,
-        "abyss": 25000000000,
-        "garden": 100000000000,
-        "glass_current": 500000000000,
-        "ember_vent": 2000000000000,
-        "starfall_rift": 10000000000000,
-    }
+    print(f"\n[AUTO-ZONE] Mencoba pindah: {current_zone} → {next_zone}")
+    result = send_action("changeZone", {"zoneId": next_zone}, revision)
+    revision = result["revision"]
 
-    zone_cost = zone_costs.get(next_zone, float("inf"))
-
-    if coins >= zone_cost:
-        print(f"\n[AUTO-ZONE] Pindah zone: {current_zone} → {next_zone}")
-        result = send_action("changeZone", {"zoneId": next_zone}, revision)
-        revision = result["revision"]
-
-        if result.get("success"):
-            print(f"[AUTO-ZONE] Berhasil pindah ke {next_zone}!")
-        else:
-            print(f"[AUTO-ZONE] Gagal pindah zone")
+    if result.get("success"):
+        print(f"[AUTO-ZONE] ✓ Berhasil pindah ke {next_zone}!")
+    else:
+        error = result.get("error", "")
+        print(f"[AUTO-ZONE] ✗ Gagal pindah ({error})")
 
     return revision
 
 
 # ===========================
 # AUTO USE ITEMS
+# API: {"type": "useItem", "payload": {"id": "worm_tin"}}
 # ===========================
 def auto_use_items(revision, state):
     if not CONFIG["auto_use_item"] or state is None:
@@ -399,26 +427,74 @@ def auto_use_items(revision, state):
     items = state.get("items", {})
     active_items = state.get("activeItems", {})
 
-    # Items yang bisa dipakai untuk boost
-    usable_items = {
-        "worm_tin": "Boost catch speed",
-        "shiny_spoon": "Boost coin value",
-        "sturdy_float": "Reduce break chance",
-        "chum_bucket": "Attract rare fish",
-        "lucky_pearl": "Boost luck",
-    }
-
-    for item_id, description in usable_items.items():
+    for item_id in USABLE_ITEMS:
         count = items.get(item_id, 0)
         # Jika punya item dan belum aktif
         if count > 0 and item_id not in active_items:
-            print(f"  [AUTO-ITEM] Menggunakan {item_id} ({description})")
-            result = send_action("useItem", {"itemId": item_id}, revision)
+            print(f"  [AUTO-ITEM] Menggunakan {item_id} (qty: {count})")
+            result = send_action("useItem", {"id": item_id}, revision)
             revision = result["revision"]
 
             if result.get("success"):
-                print(f"  [AUTO-ITEM] {item_id} aktif!")
-            time.sleep(0.3)
+                print(f"  [AUTO-ITEM] ✓ {item_id} aktif!")
+            else:
+                print(f"  [AUTO-ITEM] ✗ {item_id} gagal: {result.get('error')}")
+            time.sleep(0.2)
+
+    return revision
+
+
+# ===========================
+# AUTO REBIRTH (Prestige)
+# API: {"type": "rebirth", "payload": {}}
+# ===========================
+def auto_rebirth(revision, state):
+    if not CONFIG["auto_rebirth"] or state is None:
+        return revision
+
+    coins = state.get("coins", 0)
+    prestige_count = state.get("prestigeCount", 0)
+
+    # Hanya rebirth jika coins mencukupi minimum threshold
+    if coins < CONFIG["rebirth_min_coins"]:
+        return revision
+
+    print(f"\n[AUTO-REBIRTH] Coins: {coins:,.0f} | Prestige #{prestige_count + 1}")
+    result = send_action("rebirth", {}, revision)
+    revision = result["revision"]
+
+    if result.get("success"):
+        new_state = result.get("state", {})
+        new_prestige = new_state.get("prestigeCount", prestige_count)
+        new_tokens = new_state.get("prestigeTokens", 0)
+        print(f"[AUTO-REBIRTH] ✓ Rebirth berhasil! Prestige #{new_prestige} | Tokens: {new_tokens}")
+    else:
+        error = result.get("error", "")
+        print(f"[AUTO-REBIRTH] ✗ Gagal rebirth: {error}")
+
+    return revision
+
+
+# ===========================
+# AUTO CHARTER
+# API: {"type": "charter", "payload": {}}
+# ===========================
+def auto_charter(revision, state):
+    if not CONFIG["auto_charter"] or state is None:
+        return revision
+
+    # Charter hanya bisa jika fishdex zone penuh
+    # Kita coba aja, server yang validasi
+    print(f"\n[AUTO-CHARTER] Mencoba charter...")
+    result = send_action("charter", {}, revision)
+    revision = result["revision"]
+
+    if result.get("success"):
+        print(f"[AUTO-CHARTER] ✓ Charter berhasil!")
+    else:
+        error = result.get("error", "")
+        if error:
+            print(f"[AUTO-CHARTER] ✗ Gagal: {error}")
 
     return revision
 
@@ -438,52 +514,88 @@ def print_status(state, cycle_count):
     maintenance = state.get("maintenance", {})
     hook_durability = maintenance.get("hookDurability", 0)
     hook_max = maintenance.get("hookMax", 100)
+    prestige = state.get("prestigeCount", 0)
+    prestige_tokens = state.get("prestigeTokens", 0)
+    active_items = state.get("activeItems", {})
+    inventory_count = len(state.get("inventory", []))
 
-    print("\n" + "=" * 50)
+    print("\n" + "=" * 60)
     print(f"  CHIYO AUTO BOT - Cycle #{cycle_count}")
-    print("=" * 50)
-    print(f"  Player  : {user.get('name', 'Unknown')}")
-    print(f"  Coins   : {coins:,.0f}")
-    print(f"  Gems    : {gems}")
-    print(f"  Zone    : {zone}")
-    print(f"  Hook    : {hook_durability:.1f}/{hook_max}")
-    print(f"  Rod Lv  : {upgrades.get('rod', 0)} | Bait Lv: {upgrades.get('bait', 0)} | "
-          f"Bobber Lv: {upgrades.get('bobber', 0)}")
-    print(f"  Hook Lv : {upgrades.get('hook', 0)} | Net Lv: {upgrades.get('tackle_net', 0)} | "
-          f"Dock Lv: {upgrades.get('dock', 0)}")
-    print("=" * 50)
+    print("=" * 60)
+    print(f"  Player    : {user.get('name', 'Unknown')}")
+    print(f"  Coins     : {coins:,.0f}")
+    print(f"  Gems      : {gems}")
+    print(f"  Zone      : {zone}")
+    print(f"  Hook      : {hook_durability:.1f}/{hook_max}")
+    print(f"  Prestige  : #{prestige} (Tokens: {prestige_tokens})")
+    print(f"  Inventory : {inventory_count} fish")
+    print(f"  Active    : {', '.join(active_items.keys()) if active_items else 'none'}")
+    print(f"  ─── Upgrades ───")
+    print(f"  Rod: {upgrades.get('rod', 0)} | Bait: {upgrades.get('bait', 0)} | "
+          f"Bobber: {upgrades.get('bobber', 0)} | Hook: {upgrades.get('hook', 0)}")
+    print(f"  Net: {upgrades.get('tackle_net', 0)} | Dock: {upgrades.get('dock', 0)} | "
+          f"Crew: {upgrades.get('crew', 0)} | Junk: {upgrades.get('junk_filter', 0)}")
+    print(f"  Vane: {upgrades.get('weather_vane', 0)} | Line: {upgrades.get('line', 0)} | "
+          f"Reel: {upgrades.get('reel', 0)} | Bell: {upgrades.get('market_bell', 0)}")
+    print("=" * 60)
 
 
 # ==================================
 # MAIN LOOP
 # ==================================
 def main():
-    print("=" * 50)
-    print("  CHIYO FISH - FULL AUTO BOT")
-    print("  Features: Auto Sell, Cast, Upgrade, Zone, Repair")
-    print("=" * 50)
+    print("=" * 60)
+    print("  CHIYO FISH - FULL AUTO BOT (Python API)")
+    print("  ─────────────────────────────────────────")
+    print("  Features:")
+    print("    ✓ Auto Cast (perfect fight grade)")
+    print("    ✓ Auto Sell")
+    print("    ✓ Auto Upgrade (all upgrades)")
+    print("    ✓ Auto Repair & Clean Hook")
+    print("    ✓ Auto Use Items (worm_tin, shiny_spoon, etc)")
+    print("    ✓ Auto Zone (travel to next zone)")
+    print("    ✓ Auto Rebirth (prestige)")
+    print("    ✓ Auto Charter")
+    print("=" * 60)
 
-    revision = 271  # Starting revision (akan auto-update)
+    # Starting revision — will auto-update from first response
+    revision = 0
     cycle_count = 0
     last_state = None
+    rebirth_cycle = 0  # track cycles since last rebirth attempt
+
+    # === INITIAL SYNC: Get current state via heartbeat/sell ===
+    print("\n[INIT] Syncing game state...")
+    result = send_action("sell", {}, revision)
+    revision = result["revision"]
+    last_state = result.get("state") or last_state
+
+    if last_state:
+        print(f"[INIT] ✓ Synced! Rev: {revision}")
+        print_status(last_state, 0)
+    else:
+        print("[INIT] ⚠ Tidak bisa sync, mencoba lanjut...")
 
     while True:
         cycle_count += 1
+        rebirth_cycle += 1
 
         # =========================
         # STEP 1 - AUTO SELL
         # =========================
-        print(f"\n{'─' * 40}")
+        print(f"\n{'─' * 50}")
         print(f"  CYCLE #{cycle_count} - SELL")
-        print(f"{'─' * 40}")
+        print(f"{'─' * 50}")
 
-        while True:
+        attempts = 0
+        while attempts < 5:
+            attempts += 1
             result = send_action("sell", {}, revision)
             revision = result["revision"]
             last_state = result.get("state") or last_state
 
             if result.get("retry"):
-                time.sleep(1)
+                time.sleep(0.5)
                 continue
 
             if result.get("repair"):
@@ -493,42 +605,42 @@ def main():
 
             if result.get("clean"):
                 revision = auto_clean_hook(revision)
-                time.sleep(2)
+                time.sleep(1)
                 continue
 
             if result.get("success"):
                 print("  ✓ SELL berhasil!")
                 break
 
-            print("  ✗ SELL gagal, retry...")
-            time.sleep(3)
+            # Other error — just continue
+            break
 
         time.sleep(CONFIG["delay_after_sell"])
 
         # =========================
-        # STEP 2 - AUTO UPGRADE
-        # =========================
-        if CONFIG["auto_upgrade"] and last_state:
-            revision = auto_upgrade(revision, last_state)
-
-        # =========================
-        # STEP 3 - AUTO ZONE
-        # =========================
-        if CONFIG["auto_zone"] and last_state:
-            revision = auto_zone(revision, last_state)
-
-        # =========================
-        # STEP 4 - AUTO USE ITEMS
+        # STEP 2 - AUTO USE ITEMS
         # =========================
         if CONFIG["auto_use_item"] and last_state:
             revision = auto_use_items(revision, last_state)
 
         # =========================
+        # STEP 3 - AUTO UPGRADE
+        # =========================
+        if CONFIG["auto_upgrade"] and last_state:
+            revision = auto_upgrade(revision, last_state)
+
+        # =========================
+        # STEP 4 - AUTO ZONE
+        # =========================
+        if CONFIG["auto_zone"] and last_state:
+            revision = auto_zone(revision, last_state)
+
+        # =========================
         # STEP 5 - AUTO CAST
         # =========================
-        print(f"\n{'─' * 40}")
+        print(f"\n{'─' * 50}")
         print(f"  CYCLE #{cycle_count} - CAST x{CONFIG['cast_per_cycle']}")
-        print(f"{'─' * 40}")
+        print(f"{'─' * 50}")
 
         for i in range(CONFIG["cast_per_cycle"]):
             attempt = 0
@@ -543,7 +655,7 @@ def main():
                 last_state = result.get("state") or last_state
 
                 if result.get("retry"):
-                    time.sleep(1)
+                    time.sleep(0.5)
                     continue
 
                 if result.get("repair"):
@@ -553,27 +665,52 @@ def main():
 
                 if result.get("clean"):
                     revision = auto_clean_hook(revision)
-                    time.sleep(2)
+                    time.sleep(1)
                     continue
 
                 if result.get("success"):
-                    print(f"  ✓ Cast {i+1}/{CONFIG['cast_per_cycle']} berhasil")
+                    # Show catch info if available
+                    inv = last_state.get("inventory", []) if last_state else []
+                    if inv:
+                        last_fish = inv[-1]
+                        fish_name = last_fish.get("name", "?")
+                        fish_val = last_fish.get("value", 0)
+                        fish_rarity = last_fish.get("rarity", "?")
+                        mutation = last_fish.get("mutation")
+                        mut_str = f" [{mutation['name']}]" if mutation else ""
+                        print(f"  ✓ Cast {i+1}/{CONFIG['cast_per_cycle']} | "
+                              f"{fish_name}{mut_str} ({fish_rarity}) ${fish_val:,}")
+                    else:
+                        print(f"  ✓ Cast {i+1}/{CONFIG['cast_per_cycle']}")
                     break
 
                 if attempt >= 3:
-                    print(f"  ✗ Cast {i+1} gagal setelah {attempt} attempt, skip")
+                    print(f"  ✗ Cast {i+1} gagal setelah {attempt}x, skip")
                     break
 
-                time.sleep(1)
+                time.sleep(0.5)
 
             time.sleep(CONFIG["delay_between_cast"])
+
+        # =========================
+        # STEP 6 - AUTO CHARTER (setiap 5 cycle)
+        # =========================
+        if CONFIG["auto_charter"] and cycle_count % 5 == 0 and last_state:
+            revision = auto_charter(revision, last_state)
+
+        # =========================
+        # STEP 7 - AUTO REBIRTH (setiap 20 cycle)
+        # =========================
+        if CONFIG["auto_rebirth"] and rebirth_cycle >= 20 and last_state:
+            revision = auto_rebirth(revision, last_state)
+            rebirth_cycle = 0
 
         # =========================
         # PRINT STATUS
         # =========================
         print_status(last_state, cycle_count)
 
-        print(f"\n  → Kembali ke SELL...\n")
+        print(f"\n  → Next cycle...\n")
 
 
 # ==================================
