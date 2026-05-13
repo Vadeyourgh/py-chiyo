@@ -1,0 +1,2131 @@
+C:\Users\Val\Documents\Python\Chiyo Fish\token>python sell.py
+Memulai sell...
+Mengirim request...
+Status Code: 409
+
+========== FULL RESPONSE ==========
+{
+  "requestId": "api_mp45quu9_xhux8d",
+  "error": "Cloud save changed. Refreshing latest state.",
+  "state": {
+    "user": {
+      "id": "3866f47b-ea1c-4fc1-b613-e486a76d57e6",
+      "name": "satyaa6295#0",
+      "avatar": "https://cdn.discordapp.com/avatars/759845357411631196/b183c30092947e14e48323ca718d12c2.png",
+      "avatarColor": "#E8585A",
+      "discord": "759845357411631196"
+    },
+    "coins": 1630708741.4473622,
+    "gems": 60,
+    "prestigeTokens": 0,
+    "prestigeLifetimeTokens": 0,
+    "prestigeCount": 0,
+    "lifetimeCoins": 1649336055.4473622,
+    "biggestFish": {
+      "fishId": "open_11",
+      "weight": 2694.122913273997,
+      "caughtAt": 1778586170442
+    },
+    "rarestFish": {
+      "fishId": "reef_10",
+      "rarity": "mythic",
+      "weight": 42.91080889368199,
+      "mutation": null,
+      "rarityIdx": 11
+    },
+    "zoneId": "twilight",
+    "upgrades": {
+      "rod": 37,
+      "reel": 0,
+      "market_bell": 1,
+      "bait": 30,
+      "bobber": 27,
+      "hook": 26,
+      "reinforced_hook": 1,
+      "junk_filter": 1,
+      "tackle_brush": 1,
+      "repair_kit": 1,
+      "auto_repair_hook": 1,
+      "tackle_net": 23,
+      "weather_vane": 18,
+      "line": 10,
+      "dock": 22,
+      "tacklebox": 20,
+      "crew": 19
+    },
+    "petUpgrades": {
+      "pet_license": 1,
+      "hatch_slots": 5,
+      "companion_slots": 5,
+      "egg_warmer": 13,
+      "egg_luck": 6,
+      "pet_treats": 3
+    },
+    "prestigeUpgrades": {
+      "harbor_shares": 0,
+      "sky_writ": 0,
+      "echo_reel": 0,
+      "deep_memory": 0,
+      "hatch_tide": 0,
+      "endless_tide": 0
+    },
+    "eggInventory": {
+      "speckled": 0,
+      "driftwood": 0,
+      "riverstone": 0,
+      "reef": 0,
+      "storm": 0,
+      "glacier": 0,
+      "abyss": 0,
+      "garden": 0,
+      "glass": 0,
+      "ember": 0,
+      "starfall": 0,
+      "prestige": 0
+    },
+    "petCollection": {},
+    "equippedPets": [],
+    "hatchSlots": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "fisher": {
+      "gender": "male",
+      "owned": {
+        "skin_sunlit": true,
+        "skin_rose": true,
+        "skin_cedar": true,
+        "skin_moon": true,
+        "hair_chestnut": true,
+        "hair_ink": true,
+        "hair_coral": true,
+        "hair_silver": true,
+        "hat_dock": true,
+        "hat_none": false,
+        "hat_raincap": false,
+        "hat_stormhood": false,
+        "jacket_green": true,
+        "jacket_tide": false,
+        "jacket_prism": false,
+        "scarf_red": true,
+        "scarf_sun": false,
+        "scarf_abyss": false,
+        "pants_dock": true,
+        "pants_oilskin": false,
+        "boots_brown": true,
+        "boots_salt": false,
+        "accessory_none": true,
+        "accessory_feather": false,
+        "accessory_moonpin": false
+      },
+      "equipped": {
+        "skin": "skin_sunlit",
+        "hair": "hair_chestnut",
+        "hat": "hat_dock",
+        "jacket": "jacket_green",
+        "scarf": "scarf_red",
+        "pants": "pants_dock",
+        "boots": "boots_brown",
+        "accessory": "accessory_none"
+      }
+    },
+    "gloves": {
+      "owned": {},
+      "equipped": null,
+      "mastery": {},
+      "dust": 0,
+      "streak": 0
+    },
+    "belts": {
+      "owned": {},
+      "equipped": null,
+      "mastery": {},
+      "dust": 0
+    },
+    "backpacks": {
+      "owned": {},
+      "equipped": null,
+      "mastery": {},
+      "dust": 0
+    },
+    "gearKeys": 0,
+    "gearKeysLifetime": 0,
+    "rebirthMilestonesClaimed": [],
+    "rebirthStreak": 0,
+    "rebirthLastAt": 0,
+    "gearOwned": {
+      "starter_rod": true,
+      "glass_rod": false,
+      "prism_rod": true,
+      "tide_rod": false,
+      "storm_rod": false,
+      "moon_rod": false,
+      "abyss_rod": false,
+      "cork_bobber": true,
+      "crown_bobber": false,
+      "lantern_bobber": false,
+      "clock_bobber": false,
+      "pearl_bobber": false,
+      "spark_bobber": true,
+      "star_bobber": false,
+      "plain_lure": true,
+      "curiosity_lure": false,
+      "market_lure": false,
+      "storm_lure": false,
+      "velvet_lure": false,
+      "luck_lure": false
+    },
+    "equippedGear": {
+      "rod": "prism_rod",
+      "bobber": "spark_bobber",
+      "lure": "plain_lure"
+    },
+    "rodEnchants": {},
+    "gearStats": {
+      "bucketStickers": 2,
+      "luckyPolish": false,
+      "strikeBonus": null
+    },
+    "maintenance": {
+      "hookDurability": 27.866105582373418,
+      "hookMax": 103,
+      "foulLevel": 0,
+      "recentOdds": {
+        "zoneId": "twilight",
+        "topChase": [
+          {
+            "name": "Nightwish Guppy",
+            "oneIn": 484971,
+            "chance": 2.0619798467427347e-06,
+            "fishId": "twilight_10",
+            "rarity": "mythic",
+            "jackpot": true
+          },
+          {
+            "name": "Ghost Shark",
+            "oneIn": 2069,
+            "chance": 0.0004832102486566832,
+            "fishId": "twilight_7",
+            "rarity": "mythic",
+            "jackpot": false
+          },
+          {
+            "name": "Moonless Manta",
+            "oneIn": 384,
+            "chance": 0.002601334860940727,
+            "fishId": "twilight_8",
+            "rarity": "legendary",
+            "jackpot": false
+          },
+          {
+            "name": "Blackdragon",
+            "oneIn": 163,
+            "chance": 0.006144405374743815,
+            "fishId": "twilight_6",
+            "rarity": "legendary",
+            "jackpot": false
+          }
+        ],
+        "breakRisk": 0,
+        "foulChance": 0.011209799121815398,
+        "junkChance": 0.0743148
+      },
+      "stats": {
+        "repairs": 37,
+        "freePatches": 0,
+        "cleans": 41,
+        "perfectCleans": 4,
+        "junkCaught": 204,
+        "breaks": 35
+      }
+    },
+    "items": {
+      "worm_tin": 1,
+      "shiny_spoon": 2,
+      "sturdy_float": 1,
+      "chum_bucket": 0,
+      "lucky_pearl": 0,
+      "storm_jar": 0,
+      "pocket_moon": 0,
+      "prism_chum": 0,
+      "bucket_sticker": 0,
+      "market_ticket": 1,
+      "jelly_lantern": 2,
+      "tiny_net": 0,
+      "lucky_polish": 0
+    },
+    "activeItems": {},
+    "ingredients": {
+      "sea_salt": 0,
+      "dock_rice": 0,
+      "kelp_wrap": 0,
+      "citrus_peel": 0,
+      "shell_butter": 0,
+      "glow_miso": 0,
+      "moon_sugar": 0,
+      "storm_pepper": 0,
+      "star_saffron": 0,
+      "pond_honey": 0,
+      "mist_tea_leaf": 0,
+      "river_ginger": 0,
+      "pearl_garlic": 0,
+      "abyss_ink": 0,
+      "clockwork_truffle": 0,
+      "orbit_vanilla": 0
+    },
+    "foods": {
+      "crispy_fish_bites": 0,
+      "rice_boat_bowl": 0,
+      "briny_chip_platter": 0,
+      "kelp_speed_roll": 0,
+      "tidepool_rice_wrap": 0,
+      "market_glaze_plate": 0,
+      "buttered_kelp_cutlets": 0,
+      "citrus_luck_chowder": 0,
+      "lanternfish_congee": 0,
+      "glowmiso_noodles": 0,
+      "pepperflash_skewers": 0,
+      "moonlit_pan_roast": 0,
+      "stormboss_stew": 0,
+      "lunar_sugar_tempura": 0,
+      "starfall_feast": 0,
+      "captain_starry_hotpot": 0,
+      "constellation_sashimi": 0,
+      "aurora_needle_sashimi": 0,
+      "pond_honey_toast": 0,
+      "mist_tea_steamer": 0,
+      "ginger_kelp_ribbons": 0,
+      "honey_garlic_glaze": 0,
+      "pearl_pan_roast": 0,
+      "riverfire_curry": 0,
+      "inkblack_noodles": 0,
+      "abyssal_risotto": 0,
+      "clockwork_bento": 0,
+      "truffle_star_pie": 0,
+      "orbit_vanilla_custard": 0,
+      "event_horizon_parfait": 0
+    },
+    "activeFoods": {},
+    "cookingStats": {
+      "cooked": 0,
+      "perfectCooks": 0,
+      "bestFoodRarity": "common"
+    },
+    "weather": {
+      "id": "crosswind",
+      "startedAt": 1778682600000,
+      "until": 1778682960000,
+      "global": true
+    },
+    "dex": {
+      "pond_0": {
+        "caught": 64,
+        "biggest": 0.6926993903312324,
+        "firstAt": 1778581774853
+      },
+      "pond_1": {
+        "caught": 45,
+        "biggest": 0.45254865030560093,
+        "firstAt": 1778581788901
+      },
+      "pond_2": {
+        "caught": 57,
+        "biggest": 1.0258027218938357,
+        "firstAt": 1778581778678
+      },
+      "pond_3": {
+        "caught": 31,
+        "biggest": 0.5579131897095018,
+        "firstAt": 1778581812547
+      },
+      "pond_4": {
+        "caught": 17,
+        "biggest": 0.39279896988056606,
+        "firstAt": 1778582069371
+      },
+      "pond_5": {
+        "caught": 77,
+        "biggest": 2.2896595732084815,
+        "firstAt": 1778581777076
+      },
+      "pond_6": {
+        "caught": 4,
+        "biggest": 0.1153239580863207,
+        "firstAt": 1778582043146
+      },
+      "pond_7": {
+        "caught": 2,
+        "biggest": 0.05952917506051301,
+        "firstAt": 1778582067308
+      },
+      "pond_8": {
+        "caught": 3,
+        "biggest": 0.3898442180267771,
+        "firstAt": 1778581786964
+      },
+      "pond_9": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "pond_10": {
+        "caught": 1,
+        "biggest": 14.192153727109234,
+        "firstAt": 1778582132875
+      },
+      "lake_0": {
+        "caught": 61,
+        "biggest": 2.7050388148607607,
+        "firstAt": 1778582597343
+      },
+      "lake_1": {
+        "caught": 67,
+        "biggest": 5.503169729964619,
+        "firstAt": 1778582598400
+      },
+      "lake_2": {
+        "caught": 68,
+        "biggest": 1.5754464710251348,
+        "firstAt": 1778582605883
+      },
+      "lake_3": {
+        "caught": 25,
+        "biggest": 8.386576661548565,
+        "firstAt": 1778582604812
+      },
+      "lake_4": {
+        "caught": 13,
+        "biggest": 5.289941330689711,
+        "firstAt": 1778582662543
+      },
+      "lake_5": {
+        "caught": 7,
+        "biggest": 14.94454930410561,
+        "firstAt": 1778582617467
+      },
+      "lake_6": {
+        "caught": 1,
+        "biggest": 35.02844826758337,
+        "firstAt": 1778582867571
+      },
+      "lake_7": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "lake_8": {
+        "caught": 7,
+        "biggest": 21.34831773975788,
+        "firstAt": 1778582623618
+      },
+      "lake_9": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "lake_10": {
+        "caught": 1,
+        "biggest": 102.55661137813523,
+        "firstAt": 1778583029304
+      },
+      "river_0": {
+        "caught": 82,
+        "biggest": 0.6497067941675592,
+        "firstAt": 1778583224193
+      },
+      "river_1": {
+        "caught": 95,
+        "biggest": 9.136777117987783,
+        "firstAt": 1778583222413
+      },
+      "river_2": {
+        "caught": 65,
+        "biggest": 2.9022761090421474,
+        "firstAt": 1778583232396
+      },
+      "river_3": {
+        "caught": 30,
+        "biggest": 5.593787688752127,
+        "firstAt": 1778583267279
+      },
+      "river_4": {
+        "caught": 14,
+        "biggest": 26.27834062186454,
+        "firstAt": 1778583220097
+      },
+      "river_5": {
+        "caught": 9,
+        "biggest": 32.25930298987608,
+        "firstAt": 1778583261330
+      },
+      "river_6": {
+        "caught": 3,
+        "biggest": 3.632725608025344,
+        "firstAt": 1778583250849
+      },
+      "river_7": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "river_8": {
+        "caught": 1,
+        "biggest": 36.52102616627489,
+        "firstAt": 1778583873743
+      },
+      "river_9": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "river_10": {
+        "caught": 1,
+        "biggest": 128.00003598195715,
+        "firstAt": 1778583894919
+      },
+      "marsh_0": {
+        "caught": 42,
+        "biggest": 2.6863715471219933,
+        "firstAt": 1778583930376
+      },
+      "marsh_1": {
+        "caught": 81,
+        "biggest": 0.8895740927825959,
+        "firstAt": 1778583926941
+      },
+      "marsh_2": {
+        "caught": 56,
+        "biggest": 5.952959307976378,
+        "firstAt": 1778583923994
+      },
+      "marsh_3": {
+        "caught": 23,
+        "biggest": 0.6235566285000315,
+        "firstAt": 1778583922816
+      },
+      "marsh_4": {
+        "caught": 19,
+        "biggest": 4.596167902158249,
+        "firstAt": 1778583933935
+      },
+      "marsh_5": {
+        "caught": 10,
+        "biggest": 19.878285498011905,
+        "firstAt": 1778583976936
+      },
+      "marsh_6": {
+        "caught": 2,
+        "biggest": 0.09664815049842125,
+        "firstAt": 1778584306551
+      },
+      "marsh_7": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "marsh_8": {
+        "caught": 5,
+        "biggest": 24.70741143723383,
+        "firstAt": 1778583952349
+      },
+      "marsh_9": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "marsh_10": {
+        "caught": 1,
+        "biggest": 50.29653249177851,
+        "firstAt": 1778584392839
+      },
+      "pier_0": {
+        "caught": 85,
+        "biggest": 0.7271710885095195,
+        "firstAt": 1778584491686
+      },
+      "pier_1": {
+        "caught": 71,
+        "biggest": 3.781070234098194,
+        "firstAt": 1778584485525
+      },
+      "pier_2": {
+        "caught": 74,
+        "biggest": 0.2968997669547018,
+        "firstAt": 1778584475357
+      },
+      "pier_3": {
+        "caught": 30,
+        "biggest": 13.552759616478095,
+        "firstAt": 1778584487803
+      },
+      "pier_4": {
+        "caught": 25,
+        "biggest": 4.460581146323746,
+        "firstAt": 1778584473229
+      },
+      "pier_5": {
+        "caught": 5,
+        "biggest": 7.277939327975955,
+        "firstAt": 1778584586055
+      },
+      "pier_6": {
+        "caught": 5,
+        "biggest": 3.4527318701997056,
+        "firstAt": 1778584673635
+      },
+      "pier_7": {
+        "caught": 1,
+        "biggest": 24.47811377132217,
+        "firstAt": 1778584543253
+      },
+      "pier_8": {
+        "caught": 3,
+        "biggest": 41.26137379722358,
+        "firstAt": 1778584719866
+      },
+      "pier_9": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "pier_10": {
+        "caught": 1,
+        "biggest": 190.78072318386862,
+        "firstAt": 1778584753078
+      },
+      "reef_0": {
+        "caught": 74,
+        "biggest": 0.4753211034620375,
+        "firstAt": 1778585180882
+      },
+      "reef_1": {
+        "caught": 62,
+        "biggest": 0.497741854935163,
+        "firstAt": 1778585182165
+      },
+      "reef_2": {
+        "caught": 36,
+        "biggest": 6.4458657998401,
+        "firstAt": 1778585188618
+      },
+      "reef_3": {
+        "caught": 50,
+        "biggest": 2.780015398976512,
+        "firstAt": 1778585208764
+      },
+      "reef_4": {
+        "caught": 10,
+        "biggest": 3.2965266578290557,
+        "firstAt": 1778585245786
+      },
+      "reef_5": {
+        "caught": 7,
+        "biggest": 2.294864634032826,
+        "firstAt": 1778585192394
+      },
+      "reef_6": {
+        "caught": 2,
+        "biggest": 4.351536741376036,
+        "firstAt": 1778585535682
+      },
+      "reef_7": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "reef_8": {
+        "caught": 8,
+        "biggest": 1.1132266632129646,
+        "firstAt": 1778585285332
+      },
+      "reef_9": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "reef_10": {
+        "caught": 1,
+        "biggest": 42.91080889368199,
+        "firstAt": 1778585580895
+      },
+      "open_0": {
+        "caught": 106,
+        "biggest": 14.778871178992969,
+        "firstAt": 1778585854373
+      },
+      "open_1": {
+        "caught": 70,
+        "biggest": 52.31117296941359,
+        "firstAt": 1778585856052
+      },
+      "open_2": {
+        "caught": 40,
+        "biggest": 56.66912383328645,
+        "firstAt": 1778585869635
+      },
+      "open_3": {
+        "caught": 13,
+        "biggest": 131.60246716908838,
+        "firstAt": 1778585884029
+      },
+      "open_4": {
+        "caught": 28,
+        "biggest": 191.01242425515127,
+        "firstAt": 1778585862176
+      },
+      "open_5": {
+        "caught": 3,
+        "biggest": 461.7580490318287,
+        "firstAt": 1778586150443
+      },
+      "open_6": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "open_7": {
+        "caught": 2,
+        "biggest": 1454.7320824985604,
+        "firstAt": 1778586073860
+      },
+      "open_8": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "open_9": {
+        "caught": 6,
+        "biggest": 239.05555343302268,
+        "firstAt": 1778585878269
+      },
+      "open_10": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "open_11": {
+        "caught": 1,
+        "biggest": 2694.122913273997,
+        "firstAt": 1778586170442
+      },
+      "kelp_0": {
+        "caught": 42,
+        "biggest": 7.4553168877136535,
+        "firstAt": 1778586530839
+      },
+      "kelp_1": {
+        "caught": 43,
+        "biggest": 1.9841868249742092,
+        "firstAt": 1778586535641
+      },
+      "kelp_2": {
+        "caught": 44,
+        "biggest": 5.290708737263283,
+        "firstAt": 1778586516505
+      },
+      "kelp_3": {
+        "caught": 14,
+        "biggest": 52.50124547707106,
+        "firstAt": 1778586533990
+      },
+      "kelp_4": {
+        "caught": 9,
+        "biggest": 6.168882585314099,
+        "firstAt": 1778586532150
+      },
+      "kelp_5": {
+        "caught": 12,
+        "biggest": 13.185866617410936,
+        "firstAt": 1778586522525
+      },
+      "kelp_6": {
+        "caught": 2,
+        "biggest": 43.048483089815484,
+        "firstAt": 1778586595884
+      },
+      "kelp_7": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "kelp_8": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "kelp_9": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "kelp_10": {
+        "caught": 1,
+        "biggest": 493.35525893038704,
+        "firstAt": 1778586699266
+      },
+      "storm_0": {
+        "caught": 235,
+        "biggest": 11.198364038009105,
+        "firstAt": 1778586926962
+      },
+      "storm_1": {
+        "caught": 122,
+        "biggest": 6.681398459775229,
+        "firstAt": 1778586930788
+      },
+      "storm_2": {
+        "caught": 83,
+        "biggest": 12.623255922298945,
+        "firstAt": 1778586928769
+      },
+      "storm_3": {
+        "caught": 38,
+        "biggest": 38.150316973886596,
+        "firstAt": 1778586969172
+      },
+      "storm_4": {
+        "caught": 47,
+        "biggest": 25.713061510866584,
+        "firstAt": 1778586922904
+      },
+      "storm_5": {
+        "caught": 6,
+        "biggest": 146.94339986782884,
+        "firstAt": 1778587132365
+      },
+      "storm_6": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "storm_7": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "storm_8": {
+        "caught": 3,
+        "biggest": 787.2737110845493,
+        "firstAt": 1778587420599
+      },
+      "storm_9": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "storm_10": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "storm_11": {
+        "caught": 1,
+        "biggest": 1490.4017924161183,
+        "firstAt": 1778587179908
+      },
+      "frozen_0": {
+        "caught": 43,
+        "biggest": 4.3823128239230424,
+        "firstAt": 1778588201843
+      },
+      "frozen_1": {
+        "caught": 60,
+        "biggest": 2.3955717327559363,
+        "firstAt": 1778588218720
+      },
+      "frozen_2": {
+        "caught": 32,
+        "biggest": 10.914534753132857,
+        "firstAt": 1778588209949
+      },
+      "frozen_3": {
+        "caught": 49,
+        "biggest": 23.40775789726705,
+        "firstAt": 1778588208806
+      },
+      "frozen_4": {
+        "caught": 19,
+        "biggest": 25.90505156241854,
+        "firstAt": 1778588242247
+      },
+      "frozen_5": {
+        "caught": 18,
+        "biggest": 49.75026839360483,
+        "firstAt": 1778588277407
+      },
+      "frozen_6": {
+        "caught": 2,
+        "biggest": 94.51900406166992,
+        "firstAt": 1778588740926
+      },
+      "frozen_7": {
+        "caught": 1,
+        "biggest": 94.14165424559152,
+        "firstAt": 1778588958386
+      },
+      "frozen_8": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "frozen_9": {
+        "caught": 3,
+        "biggest": 51.53484240360001,
+        "firstAt": 1778588663465
+      },
+      "frozen_10": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "frozen_11": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "frozen_12": {
+        "caught": 1,
+        "biggest": 1342.1995607231413,
+        "firstAt": 1778588770219
+      },
+      "twilight_0": {
+        "caught": 88,
+        "biggest": 0.5833028820573238,
+        "firstAt": 1778589111368
+      },
+      "twilight_1": {
+        "caught": 75,
+        "biggest": 0.9180506768007078,
+        "firstAt": 1778589131240
+      },
+      "twilight_2": {
+        "caught": 91,
+        "biggest": 2.7319192146731424,
+        "firstAt": 1778589109623
+      },
+      "twilight_3": {
+        "caught": 19,
+        "biggest": 6.849562651703921,
+        "firstAt": 1778589147306
+      },
+      "twilight_4": {
+        "caught": 19,
+        "biggest": 3.66031203607267,
+        "firstAt": 1778589162204
+      },
+      "twilight_5": {
+        "caught": 6,
+        "biggest": 12.773635350310357,
+        "firstAt": 1778589135710
+      },
+      "twilight_6": {
+        "caught": 2,
+        "biggest": 26.648409642672455,
+        "firstAt": 1778589256051
+      },
+      "twilight_7": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "twilight_8": {
+        "caught": 1,
+        "biggest": 195.54508941491517,
+        "firstAt": 1778682211819
+      },
+      "twilight_9": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "twilight_10": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "twilight_11": {
+        "caught": 1,
+        "biggest": 384.87514357975476,
+        "firstAt": 1778589226616
+      },
+      "abyss_0": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "abyss_1": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "abyss_2": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "abyss_3": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "abyss_4": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "abyss_5": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "abyss_6": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "abyss_7": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "abyss_8": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "abyss_9": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "abyss_10": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "abyss_11": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "abyss_12": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "abyss_13": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "garden_0": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "garden_1": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "garden_2": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "garden_3": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "garden_4": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "garden_5": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "garden_6": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "garden_7": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "garden_8": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "garden_9": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "garden_10": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "garden_11": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "garden_12": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "glass_current_0": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "glass_current_1": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "glass_current_2": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "glass_current_3": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "glass_current_4": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "glass_current_5": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "glass_current_6": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "glass_current_7": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "glass_current_8": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "glass_current_9": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "glass_current_10": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "glass_current_11": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "glass_current_12": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "ember_vent_0": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "ember_vent_1": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "ember_vent_2": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "ember_vent_3": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "ember_vent_4": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "ember_vent_5": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "ember_vent_6": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "ember_vent_7": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "ember_vent_8": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "ember_vent_9": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "ember_vent_10": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "ember_vent_11": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "ember_vent_12": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "starfall_rift_0": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "starfall_rift_1": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "starfall_rift_2": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "starfall_rift_3": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "starfall_rift_4": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "starfall_rift_5": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "starfall_rift_6": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "starfall_rift_7": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "starfall_rift_8": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "starfall_rift_9": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "starfall_rift_10": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "starfall_rift_11": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "starfall_rift_12": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "starfall_rift_13": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "moon_bloom_0": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "moon_bloom_1": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "moon_bloom_2": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "moon_bloom_3": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "moon_bloom_4": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "moon_bloom_5": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "moon_bloom_6": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "moon_bloom_7": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "moon_bloom_8": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "moon_bloom_9": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "moon_bloom_10": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "moon_bloom_11": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "moon_bloom_12": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "clockwork_tide_0": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "clockwork_tide_1": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "clockwork_tide_2": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "clockwork_tide_3": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "clockwork_tide_4": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "clockwork_tide_5": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "clockwork_tide_6": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "clockwork_tide_7": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "clockwork_tide_8": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "clockwork_tide_9": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "clockwork_tide_10": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "clockwork_tide_11": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "clockwork_tide_12": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "dreamwhale_expanse_0": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "dreamwhale_expanse_1": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "dreamwhale_expanse_2": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "dreamwhale_expanse_3": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "dreamwhale_expanse_4": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "dreamwhale_expanse_5": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "dreamwhale_expanse_6": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "dreamwhale_expanse_7": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "dreamwhale_expanse_8": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "dreamwhale_expanse_9": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "dreamwhale_expanse_10": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "dreamwhale_expanse_11": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "dreamwhale_expanse_12": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "astral_tide_0": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "astral_tide_1": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "astral_tide_2": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "astral_tide_3": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "astral_tide_4": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "astral_tide_5": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "astral_tide_6": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "astral_tide_7": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "astral_tide_8": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "astral_tide_9": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "astral_tide_10": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "astral_tide_11": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "astral_tide_12": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "astral_tide_13": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "astral_tide_14": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "echoing_orbit_0": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "echoing_orbit_1": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "echoing_orbit_2": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "echoing_orbit_3": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "echoing_orbit_4": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "echoing_orbit_5": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "echoing_orbit_6": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "echoing_orbit_7": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "echoing_orbit_8": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "echoing_orbit_9": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "echoing_orbit_10": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "echoing_orbit_11": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "echoing_orbit_12": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "echoing_orbit_13": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      },
+      "echoing_orbit_14": {
+        "caught": 0,
+        "biggest": 0,
+        "firstAt": null
+      }
+    },
+    "charterDex": {
+      "kelp_0": true,
+      "kelp_1": true,
+      "kelp_2": true,
+      "kelp_3": true,
+      "kelp_4": true,
+      "kelp_5": true,
+      "kelp_6": true,
+      "lake_0": true,
+      "lake_1": true,
+      "lake_2": true,
+      "lake_3": true,
+      "lake_4": true,
+      "lake_5": true,
+      "lake_6": true,
+      "lake_8": true,
+      "open_0": true,
+      "open_1": true,
+      "open_2": true,
+      "open_3": true,
+      "open_4": true,
+      "open_5": true,
+      "open_7": true,
+      "open_9": true,
+      "pier_0": true,
+      "pier_1": true,
+      "pier_2": true,
+      "pier_3": true,
+      "pier_4": true,
+      "pier_5": true,
+      "pier_6": true,
+      "pier_7": true,
+      "pier_8": true,
+      "pond_0": true,
+      "pond_1": true,
+      "pond_2": true,
+      "pond_3": true,
+      "pond_4": true,
+      "pond_5": true,
+      "pond_6": true,
+      "pond_7": true,
+      "pond_8": true,
+      "reef_0": true,
+      "reef_1": true,
+      "reef_2": true,
+      "reef_3": true,
+      "reef_4": true,
+      "reef_5": true,
+      "reef_6": true,
+      "reef_8": true,
+      "kelp_10": true,
+      "lake_10": true,
+      "marsh_0": true,
+      "marsh_1": true,
+      "marsh_2": true,
+      "marsh_3": true,
+      "marsh_4": true,
+      "marsh_5": true,
+      "marsh_6": true,
+      "marsh_8": true,
+      "open_11": true,
+      "pier_10": true,
+      "pond_10": true,
+      "reef_10": true,
+      "river_0": true,
+      "river_1": true,
+      "river_2": true,
+      "river_3": true,
+      "river_4": true,
+      "river_5": true,
+      "river_6": true,
+      "river_8": true,
+      "storm_0": true,
+      "storm_1": true,
+      "storm_2": true,
+      "storm_3": true,
+      "storm_4": true,
+      "storm_5": true,
+      "storm_8": true,
+      "frozen_0": true,
+      "frozen_1": true,
+      "frozen_2": true,
+      "frozen_3": true,
+      "frozen_4": true,
+      "frozen_5": true,
+      "frozen_6": true,
+      "frozen_7": true,
+      "frozen_9": true,
+      "marsh_10": true,
+      "river_10": true,
+      "storm_11": true,
+      "frozen_12": true,
+      "twilight_0": true,
+      "twilight_1": true,
+      "twilight_2": true,
+      "twilight_3": true,
+      "twilight_4": true,
+      "twilight_5": true,
+      "twilight_6": true,
+      "twilight_8": true,
+      "twilight_11": true
+    },
+    "dexRewardsClaimed": {},
+    "achievements": {
+      "unlocked": {
+        "cataloger": 1778586926962,
+        "deep_line": 1778589102120,
+        "first_tug": 1778581774852,
+        "new_pages": 1778583976936,
+        "first_boss": 1778582132874,
+        "mythic_wake": 1778585580895,
+        "fresh_planks": 1778584281841,
+        "harbor_craft": 1778587032797,
+        "rare_glimmer": 1778582847004,
+        "steady_hands": 1778582202357,
+        "boss_stringer": 1778583894918,
+        "flawless_hunt": 1778583894918,
+        "first_mutation": 1778582024735,
+        "legend_on_line": 1778583894918,
+        "mutation_atlas": 1778583068264,
+        "mutation_study": 1778583360438,
+        "full_bucket_day": 1778582590944
+      },
+      "claimed": {
+        "cataloger": 1778587006439,
+        "deep_line": 1778682037046,
+        "first_tug": 1778581811479,
+        "new_pages": 1778585600618,
+        "first_boss": 1778582221665,
+        "mythic_wake": 1778585599570,
+        "fresh_planks": 1778585603001,
+        "harbor_craft": 1778587068700,
+        "rare_glimmer": 1778583018491,
+        "steady_hands": 1778582219255,
+        "boss_stringer": 1778585604317,
+        "flawless_hunt": 1778585664023,
+        "first_mutation": 1778582220525,
+        "legend_on_line": 1778585598237,
+        "mutation_atlas": 1778583079805,
+        "mutation_study": 1778585601692,
+        "full_bucket_day": 1778582730205
+      }
+    },
+    "mutationStats": {
+      "total": 139,
+      "byId": {
+        "gilded": 38,
+        "crystal": 44,
+        "giant": 23,
+        "ember": 17,
+        "moonlit": 12,
+        "dreaming": 5
+      },
+      "bestValue": {
+        "fishId": "twilight_3",
+        "name": "Gulper Eel",
+        "mutationId": "gilded",
+        "mutationName": "Gilded",
+        "value": 122130,
+        "weight": 6.465287317787974,
+        "caughtAt": 1778682222105
+      },
+      "bestWeight": {
+        "fishId": "open_9",
+        "name": "Sunken Crownfish",
+        "mutationId": "giant",
+        "mutationName": "Giant",
+        "value": 7702,
+        "weight": 239.05555343302268,
+        "caughtAt": 1778586056092
+      }
+    },
+    "bossChallenge": null,
+    "bossStats": {
+      "defeated": 11,
+      "escaped": 0,
+      "perfectWins": 11,
+      "byId": {
+        "pond_10": 1,
+        "lake_10": 1,
+        "river_10": 1,
+        "marsh_10": 1,
+        "pier_10": 1,
+        "reef_10": 1,
+        "open_11": 1,
+        "kelp_10": 1,
+        "storm_11": 1,
+        "frozen_12": 1,
+        "twilight_11": 1,
+        "abyss_12": 0,
+        "garden_12": 0,
+        "glass_current_12": 0,
+        "ember_vent_12": 0,
+        "starfall_rift_12": 0,
+        "moon_bloom_12": 0,
+        "clockwork_tide_12": 0,
+        "dreamwhale_expanse_12": 0,
+        "astral_tide_14": 0,
+        "echoing_orbit_14": 0
+      },
+      "pityByZone": {
+        "pond": 0,
+        "lake": 0,
+        "river": 0,
+        "marsh": 0,
+        "pier": 0,
+        "reef": 0,
+        "open": 0,
+        "kelp": 0,
+        "storm": 0,
+        "frozen": 0,
+        "twilight": 0,
+        "abyss": 0,
+        "garden": 0,
+        "glass_current": 0,
+        "ember_vent": 0,
+        "starfall_rift": 0,
+        "moon_bloom": 0,
+        "clockwork_tide": 0,
+        "dreamwhale_expanse": 0,
+        "astral_tide": 0,
+        "echoing_orbit": 0
+      }
+    },
+    "inventory": [
+      {
+        "ts": 1778682574135,
+        "boss": false,
+        "name": "Viperfish",
+        "oneIn": 4,
+        "shape": 1,
+        "value": 21138,
+        "fishId": "twilight_2",
+        "rarity": "uncommon",
+        "secret": false,
+        "weight": 1.822084979031955,
+        "zoneId": "twilight",
+        "catchId": "fish_mp45ohtj_5p2npd6",
+        "jackpot": false,
+        "zoneName": "Twilight Trench",
+        "rollChance": 0.2562009959577848
+      },
+      {
+        "ts": 1778682575598,
+        "boss": false,
+        "name": "Lanternfish",
+        "oneIn": 5,
+        "shape": 0,
+        "value": 7945,
+        "fishId": "twilight_0",
+        "rarity": "common",
+        "secret": false,
+        "weight": 0.4109085979716978,
+        "zoneId": "twilight",
+        "catchId": "fish_mp45oiy6_6uep5lt",
+        "jackpot": false,
+        "zoneName": "Twilight Trench",
+        "rollChance": 0.21996511541114094
+      }
+    ],
+    "travelUntil": 0,
+    "stats": {
+      "casts": 3346,
+      "catches": 3141,
+      "totalCoinsEarned": 1649336055.4473622,
+      "sessionStart": 1778581640980,
+      "byRarity": {
+        "common": 1778,
+        "uncommon": 984,
+        "rare": 316,
+        "epic": 45,
+        "legendary": 12,
+        "mythic": 6
+      }
+    },
+    "lastAutoCast": 0,
+    "lastIdle": 1778682575597,
+    "lastSeenAt": 1778682575599,
+    "server": {
+      "lastCastAt": 1778682575597,
+      "lastActionAt": 1778682575597
+    },
+    "revision": 4488
+  },
+  "revision": 4488,
+  "events": []
+}
+
+Selesai.
+
+C:\Users\Val\Documents\Python\Chiyo Fish\token>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
