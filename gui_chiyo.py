@@ -206,18 +206,23 @@ class BotEngine:
 
     def action(self, action_type, payload={}):
         for attempt in range(5):
+            if not self.running:
+                return {"success": False, "revision": self.revision, "state": self.state}
             result = send_action(action_type, payload, self.revision, self.log)
             self.revision = result["revision"]
             if result.get("retry"):
+                self.log(f"  [{action_type}] Retry {attempt+1}/5...")
                 time.sleep(2)
                 continue
             if result.get("repair"):
+                self.log(f"  [{action_type}] Hook broken, repairing...")
                 self.repair_hook()
                 time.sleep(3)
                 continue
             if result.get("success"):
                 self.state = result.get("state", self.state)
             return result
+        self.log(f"  [{action_type}] Failed after 5 attempts")
         return result
 
     def repair_hook(self):
@@ -301,57 +306,73 @@ class BotEngine:
 
     def run(self):
         self.running = True
-        self.log("=== BOT STARTED ===")
+        try:
+            self.log("=== BOT STARTED ===")
+            self.log("[INIT] Getting state...")
 
-        # Init: sell to get state
-        self.log("[INIT] Getting state...")
-        r = self.action("sell")
-        if not self.state:
-            self.log("[ERROR] Cannot get state. Check bearer/refresh token!")
-            self.running = False
-            return
+            r = self.action("sell")
+            if not self.state:
+                self.log("[ERROR] Cannot get state. Check bearer.txt / refresh_token.txt!")
+                self.running = False
+                return
 
-        name = self.state.get("user", {}).get("name", "Unknown")
-        self.log(f"[INIT] Player: {name}")
-        self.travel_to_best()
-        self.auto_upgrade()
-        self.update_status()
-
-        cast_per = int(self.settings.get("cast_per_cycle", 10))
-        delay_cast = float(self.settings.get("delay_between_cast", 0.3))
-        delay_sell = float(self.settings.get("delay_after_sell", 0.5))
-
-        while self.running:
-            # Check rebirth
-            if self.do_rebirth():
-                self.update_status()
-                continue
-
-            # Cast
-            for i in range(cast_per):
-                if not self.running:
-                    break
-                self.action("cast", {"fightGrade": "perfect", "auto": False})
-                time.sleep(delay_cast)
-
-            if not self.running:
-                break
-
-            # Sell
-            if self.settings.get("auto_sell", True):
-                self.action("sell")
-                time.sleep(delay_sell)
-
-            # Travel & Upgrade
+            name = self.state.get("user", {}).get("name", "Unknown")
+            self.log(f"[INIT] Player: {name}")
+            self.log(f"[INIT] Zone: {self.state.get('zoneId', '?')}")
+            self.log(f"[INIT] Coins: {self.state.get('coins', 0):,.0f}")
             self.travel_to_best()
             self.auto_upgrade()
-
-            # Check rebirth again
-            self.do_rebirth()
-
             self.update_status()
 
-        self.log("=== BOT STOPPED ===")
+            cast_per = int(self.settings.get("cast_per_cycle", 10))
+            delay_cast = float(self.settings.get("delay_between_cast", 0.3))
+            delay_sell = float(self.settings.get("delay_after_sell", 0.5))
+
+            cycle = 0
+            while self.running:
+                cycle += 1
+
+                # Check rebirth
+                if self.do_rebirth():
+                    self.update_status()
+                    continue
+
+                # Cast
+                self.log(f"[CYCLE {cycle}] Casting x{cast_per}...")
+                for i in range(cast_per):
+                    if not self.running:
+                        break
+                    r = self.action("cast", {"fightGrade": "perfect", "auto": False})
+                    if r.get("success"):
+                        coins = self.state.get("coins", 0)
+                        if (i + 1) % 5 == 0 or i == cast_per - 1:
+                            self.log(f"  Cast {i+1}/{cast_per} | Coins: {coins:,.0f}")
+                    time.sleep(delay_cast)
+
+                if not self.running:
+                    break
+
+                # Sell
+                if self.settings.get("auto_sell", True):
+                    self.log(f"[CYCLE {cycle}] Selling...")
+                    self.action("sell")
+                    self.log(f"  Coins after sell: {self.state.get('coins', 0):,.0f}")
+                    time.sleep(delay_sell)
+
+                # Travel & Upgrade
+                self.travel_to_best()
+                self.auto_upgrade()
+
+                # Check rebirth again
+                self.do_rebirth()
+
+                self.update_status()
+
+        except Exception as e:
+            self.log(f"[FATAL ERROR] {type(e).__name__}: {e}")
+        finally:
+            self.running = False
+            self.log("=== BOT STOPPED ===")
 
 
 # ===========================
@@ -477,15 +498,24 @@ class ChiyoGUI:
 
     def log(self, msg):
         """Thread-safe log append."""
-        def _append():
-            self.log_text.configure(state="normal")
-            self.log_text.insert("end", msg + "\n")
-            self.log_text.see("end")
-            self.log_text.configure(state="disabled")
-        self.root.after(0, _append)
+        try:
+            def _append():
+                try:
+                    self.log_text.configure(state="normal")
+                    self.log_text.insert("end", msg + "\n")
+                    self.log_text.see("end")
+                    self.log_text.configure(state="disabled")
+                except:
+                    pass
+            self.root.after(0, _append)
+        except:
+            print(msg)  # Fallback to console
 
     def update_status(self, msg):
-        self.root.after(0, lambda: self.status_var.set(msg))
+        try:
+            self.root.after(0, lambda: self.status_var.set(msg))
+        except:
+            pass
 
     def clear_log(self):
         self.log_text.configure(state="normal")
@@ -497,8 +527,16 @@ class ChiyoGUI:
             val = var.get()
             if isinstance(val, bool):
                 self.settings[key] = val
+            elif isinstance(val, str):
+                # Try to convert "True"/"False" strings
+                if val.lower() == "true":
+                    self.settings[key] = True
+                elif val.lower() == "false":
+                    self.settings[key] = False
+                else:
+                    self.settings[key] = val
             else:
-                self.settings[key] = str(val)
+                self.settings[key] = val
         self.save_settings()
         self.log("[SETTINGS] Saved!")
 
