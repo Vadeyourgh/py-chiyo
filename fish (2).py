@@ -1,6 +1,7 @@
 import requests
 import time
 import json
+import math
 
 # ===========================
 # KONSTANTA
@@ -8,6 +9,12 @@ import json
 SUPABASE_URL    = "https://qsoptshiorjhoiwwrumb.supabase.co/auth/v1/token"
 SUPABASE_APIKEY = "sb_publishable_OtJtVXVlBl7_JPubRQg6rA_5uyAGLqP"
 GAME_URL        = "https://fishin-chiyo.vercel.app/api/game/action"
+
+# ===========================
+# KONFIGURASI AUTO REBIRTH
+# ===========================
+AUTO_REBIRTH_ENABLED = True       # Set False untuk disable auto rebirth
+AUTO_REBIRTH_MAX     = 0          # 0 = unlimited, atau angka batas rebirth per session
 
 # Formula upgrade: cost = baseCost * costMul ^ currentLevel
 UPGRADE_DATA = {
@@ -102,6 +109,70 @@ CHARTER_SPECIES = {
     "astral_tide":        ["astral_tide_0","astral_tide_1","astral_tide_2","astral_tide_3","astral_tide_4","astral_tide_5","astral_tide_6","astral_tide_7","astral_tide_8"],  # 9
     "echoing_orbit":      ["echoing_orbit_0","echoing_orbit_1","echoing_orbit_2","echoing_orbit_3","echoing_orbit_4","echoing_orbit_5","echoing_orbit_6","echoing_orbit_7","echoing_orbit_8","echoing_orbit_41","echoing_orbit_42","echoing_orbit_43"],  # 12
 }
+
+
+# ===========================
+# REBIRTH / PRESTIGE FORMULAS (dari index-DeWwtqLH.js)
+# ===========================
+def threshold_for_rebirth(prestige_count):
+    """
+    Hitung minimum lifetime coins untuk rebirth berikutnya.
+    Formula: 1_000_000 * 1.14^min(count,20) * 1.06^max(0, count-20)
+    """
+    count = max(0, int(prestige_count or 0))
+    threshold = 1_000_000 * (1.14 ** min(count, 20)) * (1.06 ** max(0, count - 20))
+    return math.ceil(threshold)
+
+
+def can_rebirth(state):
+    """Cek apakah syarat rebirth terpenuhi."""
+    lifetime_coins = state.get("lifetimeCoins", 0)
+    prestige_count = state.get("prestigeCount", 0)
+    return lifetime_coins >= threshold_for_rebirth(prestige_count)
+
+
+def multiplier_from_tokens(tokens):
+    """Hitung permanent multiplier dari total prestige tokens."""
+    t = max(0, int(tokens or 0))
+    return 1 + 0.08 * math.log1p(t * 1.8) + 0.02 * math.sqrt(t)
+
+
+def get_total_tokens(state):
+    """Total lifetime tokens."""
+    return max(
+        int(state.get("prestigeLifetimeTokens", 0)),
+        int(state.get("prestigeTokens", 0))
+    )
+
+
+def print_rebirth_status(state):
+    """Print status rebirth lengkap."""
+    prestige_count = state.get("prestigeCount", 0)
+    lifetime_coins = state.get("lifetimeCoins", 0)
+    coins          = state.get("coins", 0)
+    threshold      = threshold_for_rebirth(prestige_count)
+    current_tokens = get_total_tokens(state)
+    current_mult   = multiplier_from_tokens(current_tokens)
+    next_mult      = multiplier_from_tokens(current_tokens + 1)
+    progress       = min(100, (lifetime_coins / threshold) * 100) if threshold > 0 else 0
+    ready          = "YES ✓" if lifetime_coins >= threshold else "NO"
+
+    bar_len = 30
+    filled  = int(bar_len * progress / 100)
+    bar     = "█" * filled + "░" * (bar_len - filled)
+
+    print("\n" + "=" * 55)
+    print("  REBIRTH STATUS")
+    print("=" * 55)
+    print(f"  Prestige Count   : {prestige_count}")
+    print(f"  Coins (current)  : {coins:,.0f}")
+    print(f"  Lifetime Coins   : {lifetime_coins:,.0f}")
+    print(f"  Threshold        : {threshold:,.0f}")
+    print(f"  Progress         : [{bar}] {progress:.1f}%")
+    print(f"  Ready to Rebirth : {ready}")
+    print(f"  Current Tokens   : {current_tokens} (x{current_mult:.4f})")
+    print(f"  Next Multiplier  : x{next_mult:.4f} (+{(next_mult - current_mult):.4f})")
+    print("=" * 55)
 
 
 # ===========================
@@ -501,6 +572,81 @@ def run_auto_charter(state, revision):
     return revision, state
 
 
+# ===========================
+# AUTO REBIRTH (PRESTIGE)
+# ===========================
+def run_auto_rebirth(state, revision, rebirth_session_count=0):
+    """
+    Cek dan lakukan rebirth jika syarat terpenuhi.
+    Returns: (revision, state, rebirth_session_count, did_rebirth)
+    """
+    if not AUTO_REBIRTH_ENABLED:
+        return revision, state, rebirth_session_count, False
+
+    if AUTO_REBIRTH_MAX > 0 and rebirth_session_count >= AUTO_REBIRTH_MAX:
+        return revision, state, rebirth_session_count, False
+
+    if not can_rebirth(state):
+        return revision, state, rebirth_session_count, False
+
+    prestige_count = state.get("prestigeCount", 0)
+    lifetime_coins = state.get("lifetimeCoins", 0)
+    threshold      = threshold_for_rebirth(prestige_count)
+    current_tokens = get_total_tokens(state)
+    new_mult       = multiplier_from_tokens(current_tokens + 1)
+
+    print("\n" + "★" * 55)
+    print("  ★★★ REBIRTH READY! ★★★")
+    print("★" * 55)
+    print(f"  Prestige Count  : {prestige_count}")
+    print(f"  Lifetime Coins  : {lifetime_coins:,.0f}")
+    print(f"  Threshold       : {threshold:,.0f}")
+    print(f"  Current Tokens  : {current_tokens}")
+    print(f"  New Multiplier  : x{new_mult:.4f}")
+    print("★" * 55)
+
+    # Kirim action "prestige"
+    print("\n[REBIRTH] Mengirim action prestige...")
+    while True:
+        result   = send_action("prestige", {}, revision)
+        revision = result["revision"]
+
+        if result.get("retry"):
+            time.sleep(1)
+            continue
+        if result.get("repair"):
+            revision = repair_hook_with_fallback(revision)
+            time.sleep(3)
+            continue
+
+        if result.get("success"):
+            state = result.get("state", state)
+            new_count  = state.get("prestigeCount", prestige_count + 1)
+            new_tokens = get_total_tokens(state)
+            rebirth_session_count += 1
+
+            print(f"\n[REBIRTH] ✓ BERHASIL! Prestige #{new_count}")
+            print(f"[REBIRTH] Total Tokens: {new_tokens}")
+            print(f"[REBIRTH] Multiplier: x{multiplier_from_tokens(new_tokens):.4f}")
+            print(f"[REBIRTH] Session rebirth count: {rebirth_session_count}")
+
+            # Setelah rebirth, auto upgrade lagi dari awal
+            time.sleep(3)
+            coins            = state.get("coins", 0)
+            current_upgrades = state.get("upgrades", {})
+            revision, coins, current_upgrades = run_auto_upgrade(
+                coins, current_upgrades, revision, state
+            )
+            # Update state
+            state["coins"]    = coins
+            state["upgrades"] = current_upgrades
+
+            return revision, state, rebirth_session_count, True
+        else:
+            print("[REBIRTH] ✗ Gagal! Mungkin syarat belum terpenuhi di server.")
+            return revision, state, rebirth_session_count, False
+
+
 # ==================================
 # FUNGSI PRINT STATUS
 # ==================================
@@ -566,8 +712,10 @@ while True:
 
 print_upgrade_status(coins, current_upgrades)
 print_charter_status(state)
+print_rebirth_status(state)
 revision, state = run_auto_charter(state, revision)
 revision, coins, current_upgrades = run_auto_upgrade(coins, current_upgrades, revision, state)
+rebirth_session_count = 0
 print("\n=== MULAI LOOP ===\n")
 
 while True:
@@ -636,5 +784,19 @@ while True:
     # STEP 4 - AUTO UPGRADE
     # =========================
     revision, coins, current_upgrades = run_auto_upgrade(coins, current_upgrades, revision, state)
+
+    # =========================
+    # STEP 5 - AUTO REBIRTH
+    # =========================
+    print_rebirth_status(state)
+    revision, state, rebirth_session_count, did_rebirth = run_auto_rebirth(
+        state, revision, rebirth_session_count
+    )
+    if did_rebirth:
+        # Setelah rebirth, state sudah reset, langsung ulang dari cast
+        coins            = state.get("coins", 0)
+        current_upgrades = state.get("upgrades", {})
+        print("\n=== POST-REBIRTH: Mulai ulang dari CAST ===\n")
+        continue
 
     print("\n=== Mengulang ke CAST ===\n")
