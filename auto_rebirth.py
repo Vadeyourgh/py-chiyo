@@ -171,12 +171,25 @@ def send_action(action_type, payload_data, revision_value):
         "revision": revision_value
     }
 
-    response = requests.post(GAME_URL, headers=make_headers(), json=payload)
+    try:
+        response = requests.post(GAME_URL, headers=make_headers(), json=payload, timeout=30)
+    except requests.exceptions.Timeout:
+        print(f"[{action_type.upper()}] Timeout! Server tidak merespon dalam 30 detik.")
+        return {"retry": True, "repair": False, "revision": revision_value,
+                "success": False, "state": {}}
+    except requests.exceptions.ConnectionError as e:
+        print(f"[{action_type.upper()}] Connection error: {e}")
+        return {"retry": True, "repair": False, "revision": revision_value,
+                "success": False, "state": {}}
 
     if response.status_code == 401:
         new_token = refresh_access_token()
         if new_token:
-            response = requests.post(GAME_URL, headers=make_headers(), json=payload)
+            try:
+                response = requests.post(GAME_URL, headers=make_headers(), json=payload, timeout=30)
+            except (requests.exceptions.Timeout, requests.exceptions.ConnectionError):
+                return {"retry": True, "repair": False, "revision": revision_value,
+                        "success": False, "state": {}}
         else:
             return {"retry": False, "repair": False, "revision": revision_value,
                     "success": False, "state": {}}
@@ -225,7 +238,8 @@ def execute_action(action_type, payload_data, revision, max_retries=5):
         revision = result["revision"]
 
         if result.get("retry"):
-            time.sleep(1)
+            print(f"  [RETRY] Attempt {attempt+1}/{max_retries}...")
+            time.sleep(2)
             continue
 
         if result.get("repair"):
@@ -235,6 +249,7 @@ def execute_action(action_type, payload_data, revision, max_retries=5):
 
         return result
 
+    print(f"  [{action_type.upper()}] Gagal setelah {max_retries} percobaan.")
     return result
 
 
