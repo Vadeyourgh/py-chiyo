@@ -505,6 +505,61 @@ def run_auto_upgrade(coins, current_upgrades, revision, state=None):
 
 
 # ===========================
+# AUTO TRAVEL KE ZONE TERTINGGI
+# ===========================
+def travel_to_best_zone(state, revision):
+    """
+    Otomatis pindah ke zone tertinggi yang sudah di-unlock.
+    Ini penting setelah rebirth (kembali ke pond) atau saat zone aktif
+    bukan yang tertinggi.
+    """
+    current_line = state.get("upgrades", {}).get("line", 0)
+    current_zone = state.get("zoneId", "pond")
+
+    # Zone tertinggi yang bisa diakses = ZONE_ORDER[current_line]
+    best_idx = min(current_line, len(ZONE_ORDER) - 1)
+    best_zone = ZONE_ORDER[best_idx]
+
+    # Sudah di zone terbaik?
+    if current_zone == best_zone:
+        return revision, state
+
+    # Cek apakah zone saat ini lebih rendah dari yang tersedia
+    try:
+        current_idx = ZONE_ORDER.index(current_zone)
+    except ValueError:
+        current_idx = 0
+
+    if current_idx >= best_idx:
+        return revision, state
+
+    print(f"\n[TRAVEL] Zone aktif: {current_zone} (idx {current_idx})")
+    print(f"[TRAVEL] Zone tertinggi: {best_zone} (idx {best_idx})")
+    print(f"[TRAVEL] Pindah ke {best_zone} untuk farming lebih efisien...")
+
+    result = send_action("travel", {"zoneId": best_zone}, revision)
+    revision = result["revision"]
+
+    if result.get("success"):
+        state = result.get("state", state)
+        print(f"[TRAVEL] ✓ Berhasil pindah ke: {state.get('zoneId', best_zone)}")
+    elif result.get("retry"):
+        # Coba sekali lagi
+        time.sleep(1)
+        result = send_action("travel", {"zoneId": best_zone}, revision)
+        revision = result["revision"]
+        if result.get("success"):
+            state = result.get("state", state)
+            print(f"[TRAVEL] ✓ Berhasil pindah ke: {state.get('zoneId', best_zone)}")
+        else:
+            print(f"[TRAVEL] ✗ Gagal pindah ke {best_zone}")
+    else:
+        print(f"[TRAVEL] ✗ Gagal pindah ke {best_zone}")
+
+    return revision, state
+
+
+# ===========================
 # AUTO CHARTER
 # ===========================
 def run_auto_charter(state, revision):
@@ -634,6 +689,10 @@ def run_auto_rebirth(state, revision, rebirth_session_count=0):
             time.sleep(3)
             coins            = state.get("coins", 0)
             current_upgrades = state.get("upgrades", {})
+
+            # Travel ke zone tertinggi setelah rebirth
+            revision, state = travel_to_best_zone(state, revision)
+
             revision, coins, current_upgrades = run_auto_upgrade(
                 coins, current_upgrades, revision, state
             )
@@ -714,6 +773,7 @@ print_upgrade_status(coins, current_upgrades)
 print_charter_status(state)
 print_rebirth_status(state)
 revision, state = run_auto_charter(state, revision)
+revision, state = travel_to_best_zone(state, revision)
 revision, coins, current_upgrades = run_auto_upgrade(coins, current_upgrades, revision, state)
 rebirth_session_count = 0
 print("\n=== MULAI LOOP ===\n")
@@ -779,6 +839,11 @@ while True:
     # STEP 3 - AUTO CHARTER
     # =========================
     revision, state = run_auto_charter(state, revision)
+
+    # =========================
+    # STEP 3.5 - TRAVEL KE ZONE TERTINGGI
+    # =========================
+    revision, state = travel_to_best_zone(state, revision)
 
     # =========================
     # STEP 4 - AUTO UPGRADE
